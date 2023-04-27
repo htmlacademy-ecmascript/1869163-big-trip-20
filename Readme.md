@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
-* Студент: [Valerie Kravtsova](https://up.htmlacademy.ru/ecmascript/20/user/1869163).
-* Наставник: `Неизвестно`.
+- Студент: [Valerie Kravtsova](https://up.htmlacademy.ru/ecmascript/20/user/1869163).
+- Наставник: [Олег Глущенко](https://htmlacademy.ru/profile/id305355).
 
 ---
 
