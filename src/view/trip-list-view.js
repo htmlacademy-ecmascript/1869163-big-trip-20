@@ -5,18 +5,14 @@ import TripListItemView from './trip-list-item-view';
 export default class TripListView {
   constructor(listData) {
     this.listData = listData;
-    this.tripListContainer = new TripListContainerView().getElement();
+    this.element = new TripListContainerView().getElement();
 
     this.listData.forEach(({ type, city }) => {
-      render(new TripListItemView(type, city), this.tripListContainer);
+      render(new TripListItemView(type, city), this.element);
     });
   }
 
   getElement() {
-    return this.tripListContainer;
-  }
-
-  removeElement() {
-    this.tripListContainer.remove();
+    return this.element;
   }
 }

@@ -23,6 +23,16 @@ export default class BaseView {
   }
 
   addListener(selector, eventType, func) {
-    this.getElement().querySelector(selector).addEventListener(eventType, func);
+    const element = selector
+      ? this.getElement().querySelector(selector)
+      : this.getElement();
+    element.addEventListener(eventType, func);
+  }
+
+  removeListener(selector, eventType, func) {
+    const element = selector
+      ? this.getElement().querySelector(selector)
+      : this.getElement();
+    element.removeEventListener(eventType, func);
   }
 }
