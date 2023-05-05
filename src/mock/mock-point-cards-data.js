@@ -14,20 +14,15 @@ const pointCardImgUrl = `https://loremflickr.com/248/152?random=${getRandomInteg
   6
 )}`;
 
-const mockListData = [
-  { type: 'Taxi', city: 'Amsterdam' },
-  { type: 'Flight', city: 'Chamonix' },
-  { type: 'Drive', city: 'Chamonix' },
-];
-
 const mockPointCards = [
   {
-    date: new Date('2023-03-18'),
+    id: 1,
+
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: null,
-      end: null,
+      start: new Date('2023-03-18'),
+      end: new Date('2023-03-20'),
     },
 
     city: {
@@ -48,12 +43,13 @@ const mockPointCards = [
     isFavorite: true,
   },
   {
-    date: new Date('2023-03-18'),
+    id: 2,
+
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: null,
-      end: null,
+      start: new Date('2023-03-18'),
+      end: new Date('2023-03-20'),
     },
 
     city: {
@@ -74,12 +70,13 @@ const mockPointCards = [
     isFavorite: false,
   },
   {
-    date: new Date('2023-03-18'),
+    id: 3,
+
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: null,
-      end: null,
+      start: new Date('2023-03-18'),
+      end: new Date('2023-03-20'),
     },
 
     city: {
@@ -96,16 +93,17 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: true,
+    isOpen: false,
     isFavorite: true,
   },
   {
-    date: new Date('2023-03-18'),
+    id: 4,
+
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: null,
-      end: null,
+      start: new Date('2023-03-18'),
+      end: new Date('2023-03-20'),
     },
 
     city: {
@@ -122,7 +120,7 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: true,
+    isOpen: false,
     isFavorite: true,
   },
 ];
@@ -131,4 +129,4 @@ function getRandomPointCardsData() {
   return getRandomArrayElement(mockPointCards);
 }
 
-export { mockListData, getRandomPointCardsData };
+export { getRandomPointCardsData };

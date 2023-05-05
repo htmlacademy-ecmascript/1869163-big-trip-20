@@ -3,16 +3,15 @@ import HeaderTripTimeFiltersView from '../view/header-trip-time-filters-view';
 import HeaderTripInfoView from '../view/header-trip-info-view';
 import TripSectionListFilterView from '../view/trip-section-list-filter-view';
 import TripListView from '../view/trip-list-view';
-import AddNewPointTripListView from '../view/add-new-point-trip-list-view';
 import NoPointsView from '../view/no-points-view';
-import { mockListData } from '../mock/mock-point-cards-data';
 import { emptyListText } from '../view/no-points-view';
 
 export default class Presenter {
   constructor(
     headerTripInfoContainer,
     headerTripControlsFilterContainer,
-    tripEventsSectionContainer
+    tripEventsSectionContainer,
+    pointCardsModel
   ) {
     this.headerTripInfoContainer = headerTripInfoContainer;
     this.headerTripControlsFilterContainer = headerTripControlsFilterContainer;
@@ -20,12 +19,35 @@ export default class Presenter {
     this.headerTripTimeFiltersView = new HeaderTripTimeFiltersView();
 
     this.noPointsView = new NoPointsView(emptyListText['filter-everything']);
-    this.tripListView = new TripListView(mockListData);
-    this.addNewPointTripListView = new AddNewPointTripListView(mockListData);
 
     this.headerAddNewPointButton = document.querySelector(
       '.trip-main__event-add-btn'
     );
+
+    this.pointCardsModel = pointCardsModel;
+
+    this.pointCardsModel.addModelUpdateCallBack(() => {
+      this.tripListView.removeElement();
+
+      this.tripListView = new TripListView(
+        this.pointCardsModel.getPointCardsData(),
+        this.updateOpenStateOfCard
+      );
+
+      render(this.tripListView, this.tripEventsSectionContainer);
+    });
+
+    this.updateOpenStateOfCard = (id, isOpen) =>
+      this.pointCardsModel.updateOpenStateOfCard(id, isOpen);
+
+    this.tripListView = new TripListView(
+      this.pointCardsModel.getPointCardsData(),
+      this.updateOpenStateOfCard
+    );
+
+    this.rerenderPointsList = () => {
+      this.tripListView.removeElement();
+    };
   }
 
   init() {
@@ -88,6 +110,6 @@ export default class Presenter {
     //   this.headerAddNewPointButtonListenerFunc
     // );
 
-    render(new TripListView(mockListData), this.tripEventsSectionContainer);
+    render(this.tripListView, this.tripEventsSectionContainer);
   }
 }
