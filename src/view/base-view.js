@@ -1,6 +1,8 @@
 import { createElement } from '../render.js';
 
 export default class BaseView {
+  listeners = [];
+
   getTemplate() {
     return this.createTemplate();
   }
@@ -14,6 +16,11 @@ export default class BaseView {
   }
 
   removeElement() {
+    this.listeners.forEach(({ selector, eventType, func }) =>
+      this.removeListener(selector, eventType, func)
+    );
+    this.listeners = [];
+
     this.element.remove();
     this.element = null;
   }
@@ -23,6 +30,17 @@ export default class BaseView {
   }
 
   addListener(selector, eventType, func) {
-    this.getElement().querySelector(selector).addEventListener(eventType, func);
+    this.listeners.push({ selector, eventType, func });
+    const element = selector
+      ? this.getElement().querySelector(selector)
+      : this.getElement();
+    element.addEventListener(eventType, func);
+  }
+
+  removeListener(selector, eventType, func) {
+    const element = selector
+      ? this.getElement().querySelector(selector)
+      : this.getElement();
+    element.removeEventListener(eventType, func);
   }
 }
