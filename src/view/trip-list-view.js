@@ -1,4 +1,5 @@
 import { render } from '../render';
+import { isEscapeKey } from '../utils';
 import BaseView from './base-view';
 import TripListContainerView from './trip-list-container-view';
 import TripListItemOpenedView from './trip-list-item-opened-view';
@@ -13,15 +14,30 @@ export default class TripListView extends BaseView {
     listData?.forEach((pointCard) => {
       const listItem = new TripListItemView(pointCard);
 
-      listItem.addListener('.event__rollup-btn', 'click', () =>
-        this.modelUpdateCallBack(pointCard.id, true)
-      );
+      const closeOpenedCard = () => {
+        this.modelUpdateCallBack(pointCard.id, false);
+        document.removeEventListener('keydown', onDocumentKeydown);
+      };
+
+      function onDocumentKeydown(evt) {
+        if (isEscapeKey(evt)) {
+          evt.preventDefault();
+          closeOpenedCard();
+        }
+      }
+
+      const onRollupBtnClick = () => {
+        this.modelUpdateCallBack(pointCard.id, true);
+        document.addEventListener('keydown', onDocumentKeydown);
+      };
+
+      const onResetBtnClick = closeOpenedCard;
+
+      listItem.addListener('.event__rollup-btn', 'click', onRollupBtnClick);
 
       const listItemOpened = new TripListItemOpenedView(pointCard);
 
-      listItemOpened.addListener('.event__reset-btn', 'click', () =>
-        this.modelUpdateCallBack(pointCard.id, false)
-      );
+      listItemOpened.addListener('.event__reset-btn', 'click', onResetBtnClick);
 
       render(pointCard.isOpen ? listItemOpened : listItem, this.element);
     });

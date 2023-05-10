@@ -2,6 +2,7 @@ import {
   getRandomArrayElement,
   getRandomInteger,
   getRandomPrice,
+  shuffle,
 } from '../utils.js';
 import {
   POINT_CARD_TYPES,
@@ -126,7 +127,7 @@ const mockPointCards = [
 ];
 
 function getRandomPointCardsData() {
-  return getRandomArrayElement(mockPointCards);
+  return shuffle(mockPointCards);
 }
 
 export { getRandomPointCardsData };

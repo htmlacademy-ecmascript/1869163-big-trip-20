@@ -14,7 +14,12 @@ function getRandomArrayElement(items) {
   return items[Math.floor(Math.random() * items.length)];
 }
 
+const shuffle = (array) =>
+  array.length > 0 ? [...array].sort(() => Math.random() - 0.5) : [];
+
 const getRandomPrice = () => getRandomInteger(MIN_PRICE, MAX_PRICE);
+
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
 function humanizePointCardDate(date) {
   return date ? dayjs(date).format(DATE_FORMAT) : '';
@@ -25,4 +30,6 @@ export {
   getRandomInteger,
   getRandomPrice,
   humanizePointCardDate,
+  shuffle,
+  isEscapeKey,
 };
