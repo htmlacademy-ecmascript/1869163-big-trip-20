@@ -1,13 +1,17 @@
+import AbstractView from '../framework/view/abstract-view';
 import { humanizePointCardDate } from '../utils';
-import BaseView from './base-view';
 
-export default class TripListItemView extends BaseView {
+export default class TripListItemView extends AbstractView {
   constructor(pointCard) {
     super();
     this.pointCard = pointCard;
   }
 
-  createTemplate() {
+  get id() {
+    return this.pointCard.id;
+  }
+
+  get template() {
     const { time, type, city, price } = this.pointCard;
 
     const humanizedStartDate = humanizePointCardDate(time.start);

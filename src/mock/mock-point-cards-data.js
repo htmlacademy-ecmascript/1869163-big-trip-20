@@ -2,6 +2,7 @@ import {
   getRandomArrayElement,
   getRandomInteger,
   getRandomPrice,
+  shuffle,
 } from '../utils.js';
 import {
   POINT_CARD_TYPES,
@@ -39,7 +40,6 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: true,
   },
   {
@@ -66,7 +66,6 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: false,
   },
   {
@@ -93,7 +92,6 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: true,
   },
   {
@@ -120,13 +118,12 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: true,
   },
 ];
 
 function getRandomPointCardsData() {
-  return getRandomArrayElement(mockPointCards);
+  return shuffle(mockPointCards);
 }
 
 export { getRandomPointCardsData };

@@ -3,13 +3,13 @@ import { createElement } from '../render.js';
 export default class BaseView {
   listeners = [];
 
-  getTemplate() {
+  get template() {
     return this.createTemplate();
   }
 
   getElement() {
     if (!this.element) {
-      this.element = createElement(this.getTemplate());
+      this.element = createElement(this.template);
     }
 
     return this.element;

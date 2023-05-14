@@ -1,7 +1,7 @@
-import BaseView from './base-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-export default class HeaderTripInfoView extends BaseView {
-  createTemplate() {
+export default class HeaderTripInfoView extends AbstractView {
+  get template() {
     return `
     <section class="trip-main__trip-info  trip-info">
             <div class="trip-info__main">

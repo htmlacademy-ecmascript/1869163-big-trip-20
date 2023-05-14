@@ -1,4 +1,4 @@
-import BaseView from './base-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
 const emptyListText = {
   'filter-everything': 'Click New Event to create your first point',
@@ -7,13 +7,13 @@ const emptyListText = {
   'filter-future': 'There are no future events now',
 };
 
-export default class NoPointsView extends BaseView {
+export default class NoPointsView extends AbstractView {
   constructor(text) {
     super();
     this.text = text;
   }
 
-  createTemplate() {
+  get template() {
     return `
     <p class="trip-events__msg">${this.text}</p>;
     `;

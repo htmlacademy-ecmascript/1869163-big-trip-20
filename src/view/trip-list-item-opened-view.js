@@ -1,12 +1,16 @@
-import BaseView from './base-view';
+import AbstractView from '../framework/view/abstract-view';
 
-export default class TripListItemOpenedView extends BaseView {
+export default class TripListItemOpenedView extends AbstractView {
   constructor(pointCard) {
     super();
     this.pointCard = pointCard;
   }
 
-  createTemplate() {
+  get id() {
+    return this.pointCard.id;
+  }
+
+  get template() {
     const { type, city, price } = this.pointCard;
 
     return `<li class="trip-events__item">
