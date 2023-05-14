@@ -1,7 +1,7 @@
-import BaseView from './base-view.js';
+import AbstractView from '../framework/view/abstract-view.js';
 
-export default class HeaderTripTimeFiltersView extends BaseView {
-  createTemplate() {
+export default class HeaderTripTimeFiltersView extends AbstractView {
+  get template() {
     return `
     <form class="trip-filters" action="#" method="get">
                 <div class="trip-filters__filter">

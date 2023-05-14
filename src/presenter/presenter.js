@@ -1,10 +1,10 @@
-import { RenderPosition, render } from '../render';
 import HeaderTripTimeFiltersView from '../view/header-trip-time-filters-view';
 import HeaderTripInfoView from '../view/header-trip-info-view';
 import TripSectionListFilterView from '../view/trip-section-list-filter-view';
 import TripListView from '../view/trip-list-view';
 import NoPointsView from '../view/no-points-view';
 import { emptyListText } from '../view/no-points-view';
+import { render, RenderPosition } from '../framework/render';
 
 export default class Presenter {
   constructor(
@@ -26,23 +26,10 @@ export default class Presenter {
 
     this.pointCardsModel = pointCardsModel;
 
-    this.pointCardsModel.addModelUpdateCallBack(() => {
-      this.tripListView.removeElement();
-
-      this.tripListView = new TripListView(
-        this.pointCardsModel.getPointCardsData(),
-        this.updateOpenStateOfCard
-      );
-
-      render(this.tripListView, this.tripEventsSectionContainer);
-    });
-
-    this.updateOpenStateOfCard = (id, isOpen) =>
-      this.pointCardsModel.updateOpenStateOfCard(id, isOpen);
-
     this.tripListView = new TripListView(
-      this.pointCardsModel.getPointCardsData(),
-      this.updateOpenStateOfCard
+      (point) => this.tripListView.replacePointWithForm(point),
+      () => this.tripListView.replaceFormWithPoint(),
+      () => this.tripListView.replaceFormWithPoint()
     );
 
     this.rerenderPointsList = () => {
@@ -51,14 +38,14 @@ export default class Presenter {
   }
 
   init() {
-    // Загрузка фильтров Время
+    /** Загрузка фильтров Время */
 
     // render(
     //   this.headerTripTimeFiltersView,
     //   this.headerTripControlsFilterContainer
     // );
 
-    // Заведение переменной для функции листенера кнопок Время
+    /** Заведение переменной для функции листенера кнопок Время */
 
     // this.headerTripTimeFiltersViewListenerFunc = (evt) => {
     //   this.noPointsView.removeElement();
@@ -66,7 +53,7 @@ export default class Presenter {
     //   render(this.noPointsView, this.tripEventsSectionContainer);
     // };
 
-    // Заведение переменной для функции листенера кнопки Новая точка
+    /** Заведение переменной для функции листенера кнопки Новая точка */
 
     // this.headerAddNewPointButtonListenerFunc = () => {
     //   this.headerTripTimeFiltersView.removeListener(
@@ -81,23 +68,23 @@ export default class Presenter {
     //     this.headerAddNewPointButtonListenerFunc
     //   );
 
-    //Рендер информации в хедере и списка ивентов
+    /** Рендер информации в хедере и списка ивентов */
 
     //   render(
     //     new HeaderTripInfoView(),
     //     this.headerTripInfoContainer,
-    //     RenderPosition.AFTERBEGIN
+    // RenderPosition.AFTERBEGIN
     //   );
 
     //   render(new TripSectionListFilterView(), this.tripEventsSectionContainer);
     //   render(this.addNewPointTripListView, this.tripEventsSectionContainer);
     // };
 
-    // //Рендер списка без точек
+    /** Рендер списка без точек */
 
     // render(this.noPointsView, this.tripEventsSectionContainer);
 
-    //Добавляем листенеры для фильтров Время и кнопки Новая точка
+    /** Добавляем листенеры для фильтров Время и кнопки Новая точка */
 
     // this.headerTripTimeFiltersView.addListener(
     //   '',
@@ -109,6 +96,8 @@ export default class Presenter {
     //   'click',
     //   this.headerAddNewPointButtonListenerFunc
     // );
+
+    this.tripListView.init(this.pointCardsModel.pointCards);
 
     render(this.tripListView, this.tripEventsSectionContainer);
   }

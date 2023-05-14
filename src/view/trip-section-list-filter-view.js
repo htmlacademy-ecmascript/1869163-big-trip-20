@@ -1,7 +1,7 @@
-import BaseView from './base-view';
+import AbstractView from '../framework/view/abstract-view';
 
-export default class TripSectionListFilterView extends BaseView {
-  createTemplate() {
+export default class TripSectionListFilterView extends AbstractView {
+  get template() {
     return `
         <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
             <div class="trip-sort__item  trip-sort__item--day">

@@ -40,7 +40,6 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: true,
   },
   {
@@ -67,7 +66,6 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: false,
   },
   {
@@ -94,7 +92,6 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: true,
   },
   {
@@ -121,7 +118,6 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isOpen: false,
     isFavorite: true,
   },
 ];
