@@ -10,10 +10,8 @@ import {
   POINT_CARD_DESCRIPTIONS,
 } from '../const.js';
 
-const pointCardImgUrl = `https://loremflickr.com/248/152?random=${getRandomInteger(
-  1,
-  6
-)}`;
+const getPointImgUrl = () =>
+  `https://loremflickr.com/248/152?random=${getRandomInteger(1, 6)}`;
 
 const mockPointCards = [
   {
@@ -28,7 +26,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -54,7 +52,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -80,7 +78,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -106,7 +104,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
