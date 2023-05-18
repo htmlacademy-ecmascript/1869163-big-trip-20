@@ -1,10 +1,19 @@
-import { POINT_CARDS_COUNT } from '../const';
-import { getRandomPointCardsData } from '../mock/mock-point-cards-data';
+import { randomPointCardsData } from '../mock/mock-point-cards-data';
 
 export default class PointCardsModel {
-  #pointCards = getRandomPointCardsData().slice(0, POINT_CARDS_COUNT);
+  #pointCards = randomPointCardsData;
 
   get pointCards() {
     return this.#pointCards;
+  }
+
+  updatePoint(point, updatedPoint) {
+    const updatedPointCards = this.pointCards.filter(
+      (card) => card.id !== point.id
+    );
+
+    updatedPointCards.push(updatedPoint);
+
+    this.#pointCards = updatedPointCards;
   }
 }

@@ -8,12 +8,11 @@ import {
   POINT_CARD_TYPES,
   POINT_CARD_CITY_NAMES,
   POINT_CARD_DESCRIPTIONS,
+  POINT_CARDS_COUNT,
 } from '../const.js';
 
-const pointCardImgUrl = `https://loremflickr.com/248/152?random=${getRandomInteger(
-  1,
-  6
-)}`;
+const getPointImgUrl = () =>
+  `https://loremflickr.com/248/152?random=${getRandomInteger(1, 6)}`;
 
 const mockPointCards = [
   {
@@ -28,7 +27,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -40,7 +39,7 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isFavorite: true,
+    isFavorite: false,
   },
   {
     id: 2,
@@ -54,7 +53,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -80,7 +79,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -92,7 +91,7 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isFavorite: true,
+    isFavorite: false,
   },
   {
     id: 4,
@@ -106,7 +105,7 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: pointCardImgUrl,
+      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -118,12 +117,14 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isFavorite: true,
+    isFavorite: false,
   },
 ];
 
 function getRandomPointCardsData() {
-  return shuffle(mockPointCards);
+  return shuffle(mockPointCards).slice(0, POINT_CARDS_COUNT);
 }
 
-export { getRandomPointCardsData };
+const randomPointCardsData = getRandomPointCardsData();
+
+export { randomPointCardsData };
