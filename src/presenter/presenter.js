@@ -28,6 +28,7 @@ export default class Presenter {
     this.pointCardsModel = pointCardsModel;
 
     this.tripListView = new TripListView();
+    this.pointPresenter = new PointPresenter();
   }
 
   /** Рендер информации в хедере */
@@ -54,11 +55,12 @@ export default class Presenter {
 
   /** Рендер точек */
   renderPointCards() {
-    const pointPresenter = new PointPresenter();
+    this.pointPresenter.init(this.pointCardsModel.pointCards);
 
-    pointPresenter.init(this.pointCardsModel.pointCards);
-
-    render(pointPresenter.pointCardContainer, this.tripEventsSectionContainer);
+    render(
+      this.pointPresenter.pointCardContainer,
+      this.tripEventsSectionContainer
+    );
   }
 
   init() {

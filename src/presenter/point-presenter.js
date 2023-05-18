@@ -1,4 +1,5 @@
-import { render, replace } from '../framework/render';
+import { remove, render, replace } from '../framework/render';
+import PointCardsModel from '../model/point-cards-model';
 import { isEscapeKey } from '../utils';
 import TripListItemOpenedView from '../view/trip-list-item-opened-view';
 import TripListItemView from '../view/trip-list-item-view';
@@ -11,11 +12,15 @@ export default class PointPresenter {
     this.onRollupBtnClick = (point) => this.#replacePointWithForm(point);
     this.onPointFormSubmit = () => this.#replaceFormWithPoint();
     this.onCancelBtnClick = () => this.#replaceFormWithPoint();
+    this.onFavoriteBtnClick = (point, favoriteBtn) =>
+      this.#addToFavorite(point, favoriteBtn);
 
     this.pointComponents = [];
     this.openedPointComponent = null;
 
     this.openedPoint = null;
+
+    this.pointCardsModel = new PointCardsModel();
   }
 
   #createNewPoint(point) {
@@ -27,7 +32,23 @@ export default class PointPresenter {
       this.onRollupBtnClick(point);
     });
 
+    const favoriteBtn = pointView.element.querySelector('.event__favorite-btn');
+    favoriteBtn.addEventListener('click', () => {
+      this.onFavoriteBtnClick(point, favoriteBtn);
+    });
+
     return pointView;
+  }
+
+  #changeIsFavorite(point) {
+    point.isFavorite = !point.isFavorite;
+    return point;
+  }
+
+  #addToFavorite(point, favoriteBtn) {
+    this.pointCardsModel.updatePoint(point, this.#changeIsFavorite(point));
+
+    favoriteBtn.classList.toggle('event__favorite-btn--active');
   }
 
   #createNewOpenedPoint(point) {
@@ -98,5 +119,9 @@ export default class PointPresenter {
     });
 
     document.addEventListener('keydown', this.#onDocumentKeydown);
+  }
+
+  destroy() {
+    remove(this.pointCardContainer);
   }
 }

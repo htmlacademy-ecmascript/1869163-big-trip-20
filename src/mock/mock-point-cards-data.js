@@ -8,6 +8,7 @@ import {
   POINT_CARD_TYPES,
   POINT_CARD_CITY_NAMES,
   POINT_CARD_DESCRIPTIONS,
+  POINT_CARDS_COUNT,
 } from '../const.js';
 
 const getPointImgUrl = () =>
@@ -38,7 +39,7 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isFavorite: true,
+    isFavorite: false,
   },
   {
     id: 2,
@@ -90,7 +91,7 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isFavorite: true,
+    isFavorite: false,
   },
   {
     id: 4,
@@ -116,12 +117,14 @@ const mockPointCards = [
       { offer: '', price: getRandomPrice() },
     ],
 
-    isFavorite: true,
+    isFavorite: false,
   },
 ];
 
 function getRandomPointCardsData() {
-  return shuffle(mockPointCards);
+  return shuffle(mockPointCards).slice(0, POINT_CARDS_COUNT);
 }
 
-export { getRandomPointCardsData };
+const randomPointCardsData = getRandomPointCardsData();
+
+export { randomPointCardsData };
