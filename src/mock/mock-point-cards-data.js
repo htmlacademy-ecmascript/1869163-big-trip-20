@@ -21,7 +21,7 @@ const mockPointCards = [
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: new Date('2023-03-18'),
+      start: new Date('2023-03-05'),
       end: new Date('2023-03-20'),
     },
 
@@ -73,7 +73,7 @@ const mockPointCards = [
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: new Date('2023-03-18'),
+      start: new Date('2023-03-23'),
       end: new Date('2023-03-20'),
     },
 
@@ -99,7 +99,7 @@ const mockPointCards = [
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: new Date('2023-03-18'),
+      start: new Date('2023-03-09'),
       end: new Date('2023-03-20'),
     },
 

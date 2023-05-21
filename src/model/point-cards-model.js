@@ -1,4 +1,6 @@
+import { InputId } from '../const';
 import { randomPointCardsData } from '../mock/mock-point-cards-data';
+import { sortPrice } from '../utils';
 
 export default class PointCardsModel {
   #pointCards = randomPointCardsData;
@@ -7,13 +9,40 @@ export default class PointCardsModel {
     return this.#pointCards;
   }
 
-  updatePoint(point, updatedPoint) {
-    const updatedPointCards = this.pointCards.filter(
-      (card) => card.id !== point.id
-    );
+  toggleIsFavorite(point) {
+    const updatedPoint = { ...point, isFavorite: !point.isFavorite };
+    this.updatePoint(updatedPoint);
 
-    updatedPointCards.push(updatedPoint);
+    return updatedPoint;
+  }
 
-    this.#pointCards = updatedPointCards;
+  updatePoint(updatedPoint) {
+    this.#pointCards = this.#pointCards.map((point) => {
+      if (point.id === updatedPoint.id) {
+        return updatedPoint;
+      }
+      return point;
+    });
+  }
+
+  sortPointsData(sortInputId) {
+    switch (sortInputId) {
+      case InputId.SORT_DAY:
+        this.#pointCards.sort(sortPrice);
+        break;
+      case InputId.SORT_EVENT:
+        this.#pointCards.sort(sortPrice);
+        break;
+      case InputId.SORT_TIME:
+        this.#pointCards.sort(sortPrice);
+        break;
+      case InputId.SORT_PRICE:
+        this.#pointCards.sort(sortPrice);
+        break;
+      case InputId.SORT_OFFER:
+        this.#pointCards.sort(sortPrice);
+        break;
+      default:
+    }
   }
 }

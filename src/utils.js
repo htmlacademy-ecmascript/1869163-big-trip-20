@@ -25,6 +25,8 @@ function humanizePointCardDate(date) {
   return date ? dayjs(date).format(DATE_FORMAT) : '';
 }
 
+const sortPrice = (a, b) => a.price - b.price;
+
 export {
   getRandomArrayElement,
   getRandomInteger,
@@ -32,4 +34,5 @@ export {
   humanizePointCardDate,
   shuffle,
   isEscapeKey,
+  sortPrice,
 };
