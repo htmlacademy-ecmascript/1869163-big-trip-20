@@ -1,6 +1,17 @@
 import AbstractView from '../framework/view/abstract-view';
 
 export default class TripSectionListFilterView extends AbstractView {
+  #handleSortTypeChange = null;
+
+  constructor(onSortTypeChange) {
+    super();
+    this.#handleSortTypeChange = onSortTypeChange;
+
+    this.element.addEventListener('change', (evt) =>
+      this.#handleSortTypeChange(evt.target.id)
+    );
+  }
+
   get template() {
     return `
         <form class="trip-events__trip-sort  trip-sort" action="#" method="get">

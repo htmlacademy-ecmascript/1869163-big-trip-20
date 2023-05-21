@@ -34,6 +34,15 @@ const POINT_CARD_DESCRIPTIONS = [
   'Сюда очень легко добраться!',
 ];
 
+const InputId = {
+  DEFAULT: 'default',
+  SORT_DAY: 'sort-day',
+  SORT_EVENT: 'sort-event',
+  SORT_TIME: 'sort-time',
+  SORT_PRICE: 'sort-price',
+  SORT_OFFER: 'sort-offer',
+};
+
 export {
   POINT_CARD_TYPES,
   POINT_CARD_CITY_NAMES,
@@ -41,4 +50,5 @@ export {
   MAX_PRICE,
   POINT_CARD_DESCRIPTIONS,
   POINT_CARDS_COUNT,
+  InputId,
 };

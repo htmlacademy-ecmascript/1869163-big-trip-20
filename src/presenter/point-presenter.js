@@ -9,12 +9,6 @@ export default class PointPresenter {
   constructor() {
     this.pointCardContainer = new TripListView();
 
-    this.onRollupBtnClick = (point) => this.#replacePointWithForm(point);
-    this.onPointFormSubmit = () => this.#replaceFormWithPoint();
-    this.onCancelBtnClick = () => this.#replaceFormWithPoint();
-    this.onFavoriteBtnClick = (point, favoriteBtn) =>
-      this.#addToFavorite(point, favoriteBtn);
-
     this.pointComponents = [];
     this.openedPointComponent = null;
 
@@ -29,26 +23,16 @@ export default class PointPresenter {
 
     const rollupBtn = pointView.element.querySelector('.event__rollup-btn');
     rollupBtn.addEventListener('click', () => {
-      this.onRollupBtnClick(point);
+      this.#replacePointWithForm(point);
     });
 
     const favoriteBtn = pointView.element.querySelector('.event__favorite-btn');
     favoriteBtn.addEventListener('click', () => {
-      this.onFavoriteBtnClick(point, favoriteBtn);
+      const updatedPoint = this.pointCardsModel.toggleIsFavorite(point);
+      this.#rerenderPoint(updatedPoint);
     });
 
     return pointView;
-  }
-
-  #changeIsFavorite(point) {
-    point.isFavorite = !point.isFavorite;
-    return point;
-  }
-
-  #addToFavorite(point, favoriteBtn) {
-    this.pointCardsModel.updatePoint(point, this.#changeIsFavorite(point));
-
-    favoriteBtn.classList.toggle('event__favorite-btn--active');
   }
 
   #createNewOpenedPoint(point) {
@@ -56,12 +40,14 @@ export default class PointPresenter {
     this.openedPointComponent = pointOpenedView;
 
     const pointForm = pointOpenedView.element.querySelector('form');
-    pointForm.addEventListener('submit', () => this.onPointFormSubmit(point));
+    pointForm.addEventListener('submit', () =>
+      this.#replaceFormWithPoint(point)
+    );
 
     const cancelBtn =
       pointOpenedView.element.querySelector('.event__reset-btn');
     cancelBtn.addEventListener('click', () => {
-      this.onCancelBtnClick(point);
+      this.#replaceFormWithPoint(point);
 
       this.openedPoint = null;
     });
@@ -96,6 +82,20 @@ export default class PointPresenter {
     replace(pointView, this.openedPointComponent);
 
     this.openedPointComponent = null;
+  }
+
+  #rerenderPoint(updatedPoint) {
+    const pointView = this.#createNewPoint(updatedPoint);
+
+    const oldPointView = this.pointComponents.find(
+      (component) => component.id === pointView.id
+    );
+
+    this.pointComponents = this.pointComponents.map((component) =>
+      component.id === pointView.id ? pointView : component
+    );
+
+    replace(pointView, oldPointView);
   }
 
   #onDocumentKeydown = (evt) => {

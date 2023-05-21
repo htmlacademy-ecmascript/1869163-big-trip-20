@@ -6,8 +6,12 @@ import NoPointsView from '../view/no-points-view';
 import { emptyListText } from '../view/no-points-view';
 import { render, RenderPosition } from '../framework/render';
 import PointPresenter from './point-presenter';
+import { InputId } from '../const';
 
 export default class Presenter {
+  #currentSortType = InputId.SORT_DAY;
+  #sourcedPoints = [];
+
   constructor(
     headerTripInfoContainer,
     headerTripControlsFilterContainer,
@@ -32,7 +36,7 @@ export default class Presenter {
   }
 
   /** Рендер информации в хедере */
-  renderHeaderTripInfo() {
+  #renderHeaderTripInfo() {
     render(
       new HeaderTripInfoView(),
       this.headerTripInfoContainer,
@@ -41,7 +45,7 @@ export default class Presenter {
   }
 
   /** Рендер фильтров Время */
-  renderHeaderTripTimeFilters() {
+  #renderHeaderTripTimeFilters() {
     render(
       this.headerTripTimeFiltersView,
       this.headerTripControlsFilterContainer
@@ -49,12 +53,31 @@ export default class Presenter {
   }
 
   /** Рендер фильтров в секции */
-  renderTripSectionFilters() {
-    render(new TripSectionListFilterView(), this.tripEventsSectionContainer);
+  #renderTripSectionFilters() {
+    render(
+      new TripSectionListFilterView(this.#handleSortTypeChange),
+      this.tripEventsSectionContainer
+    );
   }
 
+  #sortPoints(sortInputId) {
+    this.pointCardsModel.sortPointsData(sortInputId);
+
+    this.#currentSortType = sortInputId;
+  }
+
+  #handleSortTypeChange = (sortInputId) => {
+    if (this.#currentSortType === sortInputId) {
+      return;
+    }
+
+    this.#sortPoints(sortInputId);
+    this.pointPresenter.destroy();
+    this.#renderPointCards();
+  };
+
   /** Рендер точек */
-  renderPointCards() {
+  #renderPointCards() {
     this.pointPresenter.init(this.pointCardsModel.pointCards);
 
     render(
@@ -64,6 +87,9 @@ export default class Presenter {
   }
 
   init() {
-    this.renderPointCards();
+    this.#renderTripSectionFilters();
+    this.#renderPointCards();
+
+    this.#sourcedPoints = [...this.pointCardsModel.pointCards];
   }
 }
