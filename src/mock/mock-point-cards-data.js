@@ -1,18 +1,10 @@
-import {
-  getRandomArrayElement,
-  getRandomInteger,
-  getRandomPrice,
-  shuffle,
-} from '../utils.js';
+import { getRandomArrayElement, getRandomPrice, shuffle } from '../utils.js';
 import {
   POINT_CARD_TYPES,
   POINT_CARD_CITY_NAMES,
   POINT_CARD_DESCRIPTIONS,
   POINT_CARDS_COUNT,
 } from '../const.js';
-
-const getPointImgUrl = () =>
-  `https://loremflickr.com/248/152?random=${getRandomInteger(1, 6)}`;
 
 const mockPointCards = [
   {
@@ -27,7 +19,6 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -53,7 +44,6 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -79,7 +69,6 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 
@@ -105,7 +94,6 @@ const mockPointCards = [
 
     city: {
       name: getRandomArrayElement(POINT_CARD_CITY_NAMES),
-      img: getPointImgUrl(),
       description: getRandomArrayElement(POINT_CARD_DESCRIPTIONS),
     },
 

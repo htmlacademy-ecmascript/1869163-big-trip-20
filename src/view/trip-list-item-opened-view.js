@@ -1,9 +1,57 @@
-import AbstractView from '../framework/view/abstract-view';
+import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 
-export default class TripListItemOpenedView extends AbstractView {
+export default class TripListItemOpenedView extends AbstractStatefulView {
   constructor(pointCard) {
     super();
     this.pointCard = pointCard;
+
+    this._setState(TripListItemOpenedView.parsePointToState(this.pointCard));
+
+    this._restoreHandlers();
+  }
+
+  _restoreHandlers() {
+    // this.element
+    //   .querySelector('form')
+    //   .addEventListener('submit', this.#formSubmitHandler);
+
+    this.element
+      .querySelector('.event__type-group')
+      .addEventListener('click', this.#eventTypeGroupHandler);
+
+    this.element
+      .querySelector('.event__input--destination')
+      .addEventListener('input', this.#destinationInputHandler);
+  }
+
+  #eventTypeGroupHandler = (evt) => {
+    if (evt.target.tagName !== 'LABEL') {
+      return;
+    }
+
+    evt.preventDefault();
+
+    this._state.type = evt.target.textContent;
+
+    this.updateElement(this._state.type);
+  };
+
+  #destinationInputHandler = (evt) => {
+    evt.preventDefault();
+
+    this._state.city = evt.target.value;
+  };
+
+  static parsePointToState(point) {
+    return {
+      ...point,
+    };
+  }
+
+  static parseStateToPoint(state) {
+    const point = { ...state };
+
+    return point;
   }
 
   get id() {
@@ -11,7 +59,9 @@ export default class TripListItemOpenedView extends AbstractView {
   }
 
   get template() {
-    const { type, city, price } = this.pointCard;
+    const { type, city, price } = this._state;
+
+    const iconImg = `img/icons/${this._state.type.toLowerCase()}.png`;
 
     return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -19,7 +69,7 @@ export default class TripListItemOpenedView extends AbstractView {
                   <div class="event__type-wrapper">
                     <label class="event__type  event__type-btn" for="event-type-toggle-1">
                       <span class="visually-hidden">Choose event type</span>
-                      <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+                      <img class="event__type-icon" width="17" height="17" src="${iconImg}" alt="Event type icon">
                     </label>
                     <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 

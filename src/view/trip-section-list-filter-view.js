@@ -1,14 +1,14 @@
 import AbstractView from '../framework/view/abstract-view';
 
 export default class TripSectionListFilterView extends AbstractView {
-  #handleSortTypeChange = null;
+  #onSortTypeChange = null;
 
   constructor(onSortTypeChange) {
     super();
-    this.#handleSortTypeChange = onSortTypeChange;
+    this.#onSortTypeChange = onSortTypeChange;
 
     this.element.addEventListener('change', (evt) =>
-      this.#handleSortTypeChange(evt.target.id)
+      this.#onSortTypeChange(evt.target.id)
     );
   }
 
