@@ -55,7 +55,7 @@ export default class Presenter {
   /** Рендер фильтров в секции */
   #renderTripSectionFilters() {
     render(
-      new TripSectionListFilterView(this.#handleSortTypeChange),
+      new TripSectionListFilterView(this.#onSortTypeChange),
       this.tripEventsSectionContainer
     );
   }
@@ -66,7 +66,7 @@ export default class Presenter {
     this.#currentSortType = sortInputId;
   }
 
-  #handleSortTypeChange = (sortInputId) => {
+  #onSortTypeChange = (sortInputId) => {
     if (this.#currentSortType === sortInputId) {
       return;
     }
