@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view';
-import { humanizePointCardDate } from '../utils';
+import { getTimeFromDate, humanizePointCardDate } from '../utils';
 
 export default class TripListItemView extends AbstractView {
   constructor(pointCard) {
@@ -16,21 +16,27 @@ export default class TripListItemView extends AbstractView {
 
     const isFavoriteClass = isFavorite ? ' event__favorite-btn--active' : '';
 
-    const humanizedStartDate = humanizePointCardDate(time.start);
+    const startDate = humanizePointCardDate(time.start);
+    const endDate = humanizePointCardDate(time.end);
+
+    const startTime = getTimeFromDate(time.start);
+    const endTime = getTimeFromDate(time.end);
 
     return `
     <li class="trip-events__item">
               <div class="event">
-                <time class="event__date" datetime=${time}>${humanizedStartDate}</time>
+                <time class="event__date"
+                datetime="${time.start}">${startDate}</time>
                 <div class="event__type">
                   <img class="event__type-icon" width="42" height="42" src="img/icons/${type.toLowerCase()}.png" alt="Event type icon">
                 </div>
                 <h3 class="event__title">${type} ${city.name}</h3>
                 <div class="event__schedule">
                   <p class="event__time">
-                    <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+                    <time class="event__start-time"
+                    datetime="${time.start}">${startTime}</time>
                     —
-                    <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+                    <time class="event__end-time" datetime="${endDate}">${endTime}</time>
                   </p>
                   <p class="event__duration">30M</p>
                 </div>

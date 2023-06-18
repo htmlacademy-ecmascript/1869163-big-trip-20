@@ -12,6 +12,10 @@ export default class TripSectionListFilterView extends AbstractView {
     );
   }
 
+  setDayActive() {
+    this.element.querySelector('#sort-day').checked = true;
+  }
+
   get template() {
     return `
         <form class="trip-events__trip-sort  trip-sort" action="#" method="get">

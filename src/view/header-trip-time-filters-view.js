@@ -1,6 +1,10 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 export default class HeaderTripTimeFiltersView extends AbstractView {
+  resetFilter() {
+    this.element.querySelector('#filter-everything').checked = true;
+  }
+
   get template() {
     return `
     <form class="trip-filters" action="#" method="get">

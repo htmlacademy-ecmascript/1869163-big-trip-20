@@ -1,19 +1,64 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
+import flatpickr from 'flatpickr';
+
+import 'flatpickr/dist/flatpickr.min.css';
+import { humanizePointCardDate } from '../utils';
 
 export default class TripListItemOpenedView extends AbstractStatefulView {
-  constructor(pointCard) {
+  #datepickerStart = null;
+  #datepickerEnd = null;
+
+  constructor(pointCard, formCancelHandler, formSubmitHandler) {
     super();
     this.pointCard = pointCard;
+
+    this.formCancelHandler = formCancelHandler;
+    this.formSubmitHandler = formSubmitHandler;
 
     this._setState(TripListItemOpenedView.parsePointToState(this.pointCard));
 
     this._restoreHandlers();
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this.#datepickerStart && this.#datepickerEnd) {
+      this.#datepickerStart.destroy();
+      this.#datepickerEnd.destroy();
+      this.#datepickerStart = null;
+      this.#datepickerEnd = null;
+    }
+  }
+
+  #setDatepicker() {
+    this.#datepickerStart = flatpickr(
+      this.element.querySelector('#event-start-time-1'),
+      {
+        defaultDate: this._state.time.start,
+        enableTime: true,
+        dateFormat: 'd-M-Y',
+      }
+    );
+
+    this.#datepickerEnd = flatpickr(
+      this.element.querySelector('#event-end-time-1'),
+      {
+        defaultDate: this._state.time.start,
+        enableTime: true,
+        dateFormat: 'd-M-Y',
+      }
+    );
+  }
+
   _restoreHandlers() {
-    // this.element
-    //   .querySelector('form')
-    //   .addEventListener('submit', this.#formSubmitHandler);
+    this.element
+      .querySelector('.event__reset-btn')
+      .addEventListener('click', this.formCancelHandler);
+
+    this.element
+      .querySelector('form')
+      .addEventListener('submit', this.formSubmitHandler);
 
     this.element
       .querySelector('.event__type-group')
@@ -22,6 +67,8 @@ export default class TripListItemOpenedView extends AbstractStatefulView {
     this.element
       .querySelector('.event__input--destination')
       .addEventListener('input', this.#destinationInputHandler);
+
+    this.#setDatepicker();
   }
 
   #eventTypeGroupHandler = (evt) => {
@@ -59,9 +106,12 @@ export default class TripListItemOpenedView extends AbstractStatefulView {
   }
 
   get template() {
-    const { type, city, price } = this._state;
+    const { type, city, price, time } = this._state;
 
     const iconImg = `img/icons/${this._state.type.toLowerCase()}.png`;
+
+    const startTime = humanizePointCardDate(time.start);
+    const endTime = humanizePointCardDate(time.end);
 
     return `<li class="trip-events__item">
               <form class="event event--edit" action="#" method="post">
@@ -139,10 +189,10 @@ export default class TripListItemOpenedView extends AbstractStatefulView {
 
                   <div class="event__field-group  event__field-group--time">
                     <label class="visually-hidden" for="event-start-time-1">From</label>
-                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
+                    <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${startTime}">
                     —
                     <label class="visually-hidden" for="event-end-time-1">To</label>
-                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
+                    <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${endTime}">
                   </div>
 
                   <div class="event__field-group  event__field-group--price">
