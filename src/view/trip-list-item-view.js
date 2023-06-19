@@ -9,6 +9,7 @@ export default class TripListItemView extends AbstractView {
     pointCardsModel.addObserver((eventType, errorPoint) => {
       if (
         eventType === EventType.RESPONSE_ERROR &&
+        errorPoint &&
         pointCard.id === errorPoint.id
       ) {
         this.shake();
