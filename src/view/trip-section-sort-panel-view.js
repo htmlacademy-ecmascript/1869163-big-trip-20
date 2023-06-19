@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view';
 
-export default class TripSectionListFilterView extends AbstractView {
+export default class TripSectionSortPanelView extends AbstractView {
   #onSortTypeChange = null;
 
   constructor(onSortTypeChange) {

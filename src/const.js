@@ -1,63 +1,8 @@
-const MIN_PRICE = 20;
-const MAX_PRICE = 100;
-const POINT_CARDS_COUNT = 3;
-
-const PointCardType = {
-  TAXI: 'Taxi',
-  BUS: 'Bus',
-  TRAIN: 'Train',
-  SHIP: 'Ship',
-  DRIVE: 'Drive',
-  FLIGHT: 'Flight',
-  CHECK_IN: 'Check-in',
-  SIGHTSEEING: 'Sightseeing',
-  RESTAURANT: 'Restaurant',
-};
-
-const POINT_CARD_TYPES = [
-  'Taxi',
-  'Bus',
-  'Train',
-  'Ship',
-  'Drive',
-  'Flight',
-  'Check-in',
-  'Sightseeing',
-  'Restaurant',
-];
-
-const POINT_CARD_CITY_NAMES = [
-  'Praha',
-  'New York',
-  'Podebrady',
-  'Brno',
-  'Rostov',
-  'Vladivostok',
-  'Chicago',
-  'Mordor',
-  'Tokyo',
-];
-
-const POINT_CARD_DESCRIPTIONS = [
-  'Здесь вкусно кормят!',
-  'Это место очень хвалят!',
-  'Топ 1 ТрипАдвайзера!',
-  'Здесь Кексу очень понравилось!',
-  'Сюда очень легко добраться!',
-];
-
 const FilterType = {
   EVERYTHING: 'filter-everything',
   FUTURE: 'filter-future',
   PRESENT: 'filter-present',
   PAST: 'filter-past',
-};
-
-const EmptyListMessage = {
-  'filter-everything': 'Click New Event to create your first point',
-  'filter-future': 'There are no future events now',
-  'filter-present': 'There are no present events now',
-  'filter-past': 'There are no past events now',
 };
 
 const SortType = {
@@ -66,22 +11,63 @@ const SortType = {
   SORT_PRICE: 'sort-price',
 };
 
+const EmptyListMessage = {
+  'sort-day': 'Click New Event to create your first point',
+  'filter-everything': 'Click New Event to create your first point',
+  'filter-future': 'There are no future events now',
+  'filter-present': 'There are no present events now',
+  'filter-past': 'There are no past events now',
+};
+
 const EventType = {
   SET_FILTER: 'SET_FILTER',
   SET_SORT_TYPE: 'SET_SORT_TYPE',
-  ADD_NEW_POINT: 'ADD_NEW_POINT',
+  FETCH_POINTS: 'FETCH_POINTS',
+  FETCH_DESTINATIONS: 'FETCH_DESTINATIONS',
+  UPDATE_POINT: 'UPDATE_POINT',
+  ADD_POINT: 'ADD_POINT',
+  REQUEST_TO_DELETE_POINT: 'REQUEST_TO_DELETE_POINT',
+  POINT_IS_DELETED: 'POINT_IS_DELETED',
+  SENDING_REQUEST: 'SENDING_REQUEST',
+  RESPONSE_ERROR: 'RESPONSE_ERROR',
 };
 
+const API_SERVER_END_POINT = 'https://20.ecmascript.pages.academy';
+
+const AUTHORIZATION_TOKEN = 'Basic 000111222';
+
+const RequestMethods = {
+  GET: 'GET',
+  POST: 'POST',
+  PUT: 'PUT',
+  DELETE: 'DELETE',
+};
+
+const Endpoints = {
+  GET_POINTS: 'big-trip/points',
+  GET_DESTINATIONS: 'big-trip/destinations',
+  GET_OFFERS: 'big-trip/offers',
+  POST_POINT: 'big-trip/points',
+  UPDATE_POINT: 'big-trip/points',
+  ADD_POINT: 'big-trip/points',
+  DELETE_POINT: 'big-trip/points',
+};
+
+const MINUTES_PER_HOUR = 60;
+const HOURS_PER_DAY = 24;
+
+const POINT_DEFAULT_TYPE = 'bus';
+
 export {
-  POINT_CARD_TYPES,
-  POINT_CARD_CITY_NAMES,
-  MIN_PRICE,
-  MAX_PRICE,
-  POINT_CARD_DESCRIPTIONS,
-  POINT_CARDS_COUNT,
   FilterType,
   SortType,
   EventType,
   EmptyListMessage,
-  PointCardType,
+  API_SERVER_END_POINT,
+  AUTHORIZATION_TOKEN,
+  RequestMethods,
+  Endpoints,
+  MINUTES_PER_HOUR,
+  HOURS_PER_DAY,
+  POINT_DEFAULT_TYPE,
 };
