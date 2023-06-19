@@ -1,10 +1,36 @@
+import { EventType } from '../const';
 import AbstractView from '../framework/view/abstract-view';
-import { getTimeFromDate, humanizePointCardDate } from '../utils';
+import { getFormattedTime, getFormattedDate, getTimeDuration } from '../utils';
 
 export default class TripListItemView extends AbstractView {
-  constructor(pointCard) {
+  constructor(pointCard, pointCardsModel) {
     super();
     this.pointCard = pointCard;
+    pointCardsModel.addObserver((eventType, errorPoint) => {
+      if (
+        eventType === EventType.RESPONSE_ERROR &&
+        pointCard.id === errorPoint.id
+      ) {
+        this.shake();
+      }
+    });
+  }
+
+  #renderOffer({ title, price }) {
+    return `
+      <li class="event__offer">
+        <span class="event__offer-title">${title}</span>
+        +€&nbsp;
+        <span class="event__offer-price">${price}</span>
+      </li>
+    `;
+  }
+
+  #renderOffers(offers) {
+    return offers
+      .filter(({ isChecked }) => isChecked)
+      .map(this.#renderOffer)
+      .join('');
   }
 
   get id() {
@@ -12,15 +38,15 @@ export default class TripListItemView extends AbstractView {
   }
 
   get template() {
-    const { time, type, city, price, isFavorite } = this.pointCard;
+    const { time, type, city, price, isFavorite, offers } = this.pointCard;
 
     const isFavoriteClass = isFavorite ? ' event__favorite-btn--active' : '';
 
-    const startDate = humanizePointCardDate(time.start);
-    const endDate = humanizePointCardDate(time.end);
+    const startDate = getFormattedDate(time.start);
+    const endDate = getFormattedDate(time.end);
 
-    const startTime = getTimeFromDate(time.start);
-    const endTime = getTimeFromDate(time.end);
+    const startTime = getFormattedTime(time.start);
+    const endTime = getFormattedTime(time.end);
 
     return `
     <li class="trip-events__item">
@@ -38,18 +64,14 @@ export default class TripListItemView extends AbstractView {
                     —
                     <time class="event__end-time" datetime="${endDate}">${endTime}</time>
                   </p>
-                  <p class="event__duration">30M</p>
+                  <p class="event__duration">${getTimeDuration(time)}</p>
                 </div>
                 <p class="event__price">
                   €&nbsp;<span class="event__price-value">${price}</span>
                 </p>
                 <h4 class="visually-hidden">Offers:</h4>
                 <ul class="event__selected-offers">
-                  <li class="event__offer">
-                    <span class="event__offer-title">Order Uber</span>
-                    +€&nbsp;
-                    <span class="event__offer-price">20</span>
-                  </li>
+                  ${this.#renderOffers(offers)}
                 </ul>
                 <button class="event__favorite-btn ${isFavoriteClass}" type="button">
                   <span class="visually-hidden">Add to favorite</span>

@@ -9,7 +9,6 @@ export default class FilterModel extends Observable {
 
   set filter(newFilter) {
     this.currentFilter = newFilter;
-
     this._notify(EventType.SET_FILTER, newFilter);
   }
 
