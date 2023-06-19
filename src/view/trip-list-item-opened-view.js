@@ -350,8 +350,8 @@ export default class TripListItemOpenedView extends AbstractStatefulView {
                   </div>
 
                   <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-                  <button class="event__reset-btn event__reset-btn--
-                  ${id ? 'delete' : 'reset'}"
+                  <button class="event__reset-btn
+                  event__reset-btn--${id ? 'delete' : 'reset'}"
                   type="${id ? 'button' : 'reset'}">
                   ${id ? 'Delete' : 'Cancel'}</button>
                   ${isRollupBtn}
