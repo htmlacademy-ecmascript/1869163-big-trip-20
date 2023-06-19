@@ -40,6 +40,7 @@ export default class Presenter {
 
     this.currentModifier = { eventType: null, modifier: SortType.SORT_DAY };
     this.emptyListMessageView = null;
+    this.filteredPoints = [...this.pointCardsModel.pointCards];
 
     this.filterObserverCallback = (eventType, modifier) => {
       this.currentModifier = { eventType, modifier };
@@ -47,7 +48,7 @@ export default class Presenter {
     };
     this.sortModel.addObserver(this.filterObserverCallback);
 
-    this.pointCardsModel.addObserver((eventType) => {
+    this.pointCardsModel.addObserver((eventType, point) => {
       if (
         (eventType === EventType.FETCH_POINTS ||
           eventType === EventType.ADD_POINT) &&
@@ -68,10 +69,15 @@ export default class Presenter {
       if (
         eventType === EventType.ADD_POINT ||
         eventType === EventType.FETCH_POINTS ||
-        eventType === EventType.POINT_IS_DELETED ||
-        eventType === EventType.UPDATE_POINT
+        eventType === EventType.POINT_IS_DELETED
       ) {
         this.timeFilterPresenter.resetFilter();
+        this.setSortPanelDayActive();
+        this.#rerenderPointCards();
+      }
+
+      if (eventType === EventType.UPDATE_POINT) {
+        this.updateFilteredPoints(point);
         this.#rerenderPointCards();
       }
     });
@@ -95,6 +101,12 @@ export default class Presenter {
     });
   }
 
+  updateFilteredPoints(newPoint) {
+    this.filteredPoints = this.filteredPoints.map((filteredPoint) =>
+      filteredPoint.id === newPoint.id ? newPoint : filteredPoint
+    );
+  }
+
   setSortPanelDayActive() {
     this.TripSectionSortPanelView.setDayActive();
     this.currentModifier = {
@@ -105,28 +117,37 @@ export default class Presenter {
 
   get pointCards() {
     if (this.currentModifier.eventType === EventType.SET_FILTER) {
+      this.filteredPoints = [...this.pointCardsModel.pointCards];
+
       switch (this.currentModifier.modifier) {
         case FilterType.FUTURE:
-          return [...this.pointCardsModel.pointCards].filter(filterFuture);
+          this.filteredPoints = this.filteredPoints.filter(filterFuture);
+          break;
         case FilterType.PAST:
-          return [...this.pointCardsModel.pointCards].filter(filterPast);
+          this.filteredPoints = this.filteredPoints.filter(filterPast);
+          break;
         case FilterType.PRESENT:
-          return [...this.pointCardsModel.pointCards].filter(filterPresent);
+          this.filteredPoints = this.filteredPoints.filter(filterPresent);
+          break;
         default:
-          return this.pointCardsModel.pointCards;
+          this.filteredPoints = this.filteredPoints.sort(sortDay);
+          break;
       }
     }
 
     switch (this.currentModifier.modifier) {
-      case SortType.SORT_DAY:
-        return [...this.pointCardsModel.pointCards].sort(sortDay);
       case SortType.SORT_TIME:
-        return [...this.pointCardsModel.pointCards].sort(sortDuration);
+        this.filteredPoints.sort(sortDuration);
+        break;
       case SortType.SORT_PRICE:
-        return [...this.pointCardsModel.pointCards].sort(sortPrice);
+        this.filteredPoints.sort(sortPrice);
+        break;
       default:
-        return this.pointCardsModel.pointCards;
+        this.filteredPoints.sort(sortDay);
+        break;
     }
+
+    return this.filteredPoints;
   }
 
   #renderTripSectionSortPanel() {

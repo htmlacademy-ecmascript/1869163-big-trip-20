@@ -105,7 +105,7 @@ export default class PointCardsModel extends Observable {
         return point;
       });
 
-      this._notify(EventType.UPDATE_POINT);
+      this._notify(EventType.UPDATE_POINT, updatedPoint);
     } catch (error) {
       this._notify(EventType.RESPONSE_ERROR, updatedPoint);
     }

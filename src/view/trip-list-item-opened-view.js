@@ -160,7 +160,7 @@ export default class TripListItemOpenedView extends AbstractStatefulView {
 
     this.element
       .querySelector('.event__input--destination')
-      .addEventListener('input', this.#destinationInputHandler);
+      .addEventListener('change', this.#destinationInputHandler);
 
     this.#setDatepicker();
   }
@@ -181,6 +181,7 @@ export default class TripListItemOpenedView extends AbstractStatefulView {
   #destinationInputHandler = (evt) => {
     evt.preventDefault();
     const name = evt.target.value;
+
     const city = this.pointCardModel.citiesByName[name];
     if (!city) {
       evt.target.value = '';
