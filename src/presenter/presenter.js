@@ -48,7 +48,7 @@ export default class Presenter {
     };
     this.sortModel.addObserver(this.filterObserverCallback);
 
-    this.pointCardsModel.addObserver((eventType) => {
+    this.pointCardsModel.addObserver((eventType, point) => {
       if (
         (eventType === EventType.FETCH_POINTS ||
           eventType === EventType.ADD_POINT) &&
@@ -77,6 +77,7 @@ export default class Presenter {
       }
 
       if (eventType === EventType.UPDATE_POINT) {
+        this.updateFilteredPoints(point);
         this.#rerenderPointCards();
       }
     });
@@ -98,6 +99,12 @@ export default class Presenter {
         this.setSortPanelDayActive();
       }
     });
+  }
+
+  updateFilteredPoints(newPoint) {
+    this.filteredPoints = this.filteredPoints.map((filteredPoint) =>
+      filteredPoint.id === newPoint.id ? newPoint : filteredPoint
+    );
   }
 
   setSortPanelDayActive() {
