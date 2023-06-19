@@ -8,7 +8,7 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(duration);
 
 const DATE_FORMAT = 'D MMMM';
-const TIME_FORMAT = 'H:m';
+const TIME_FORMAT = 'HH:mm';
 
 const getFormattedDate = (date) =>
   date ? dayjs(date).format(DATE_FORMAT) : '';
@@ -32,7 +32,7 @@ const getTimeDuration = ({ start, end }) => {
   const hours =
     Math.round(dayjs(end).diff(start, 'hour')) - days * HOURS_PER_DAY;
   const minutes =
-    Math.round(dayjs(end).diff(start, 'minute', true)) -
+    Math.round(dayjs(end).diff(start, 'minute')) -
     hours * MINUTES_PER_HOUR -
     days * MINUTES_PER_HOUR * HOURS_PER_DAY;
 
