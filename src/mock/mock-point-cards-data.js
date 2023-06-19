@@ -3,7 +3,6 @@ import {
   POINT_CARD_TYPES,
   POINT_CARD_CITY_NAMES,
   POINT_CARD_DESCRIPTIONS,
-  POINT_CARDS_COUNT,
 } from '../const.js';
 
 const mockPointCards = [
@@ -13,8 +12,8 @@ const mockPointCards = [
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: new Date('2023-03-05'),
-      end: new Date('2023-03-20'),
+      start: new Date('2023-07-05 18:00'),
+      end: new Date('2023-07-20 19:00'),
     },
 
     city: {
@@ -38,8 +37,8 @@ const mockPointCards = [
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: new Date('2023-03-18'),
-      end: new Date('2023-03-20'),
+      start: new Date('2023-06-20 10:30'),
+      end: new Date('2023-06-25 12:00'),
     },
 
     city: {
@@ -63,8 +62,8 @@ const mockPointCards = [
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: new Date('2023-03-23'),
-      end: new Date('2023-03-20'),
+      start: new Date('2023-06-09 14:00'),
+      end: new Date('2023-07-20 16:00'),
     },
 
     city: {
@@ -88,8 +87,8 @@ const mockPointCards = [
     type: getRandomArrayElement(POINT_CARD_TYPES),
 
     time: {
-      start: new Date('2023-03-09'),
-      end: new Date('2023-03-20'),
+      start: new Date('2023-06-09 15:00'),
+      end: new Date('2023-06-20 20:00'),
     },
 
     city: {
@@ -110,7 +109,7 @@ const mockPointCards = [
 ];
 
 function getRandomPointCardsData() {
-  return shuffle(mockPointCards).slice(0, POINT_CARDS_COUNT);
+  return shuffle(mockPointCards);
 }
 
 const randomPointCardsData = getRandomPointCardsData();

@@ -1,19 +1,13 @@
-import { InputId } from '../const';
+import { EventType, PointCardType } from '../const';
+import Observable from '../framework/observable';
 import { randomPointCardsData } from '../mock/mock-point-cards-data';
-import { sortPrice } from '../utils';
+import { nanoid } from 'nanoid';
 
-export default class PointCardsModel {
+export default class PointCardsModel extends Observable {
   #pointCards = randomPointCardsData;
 
   get pointCards() {
     return this.#pointCards;
-  }
-
-  toggleIsFavorite(point) {
-    const updatedPoint = { ...point, isFavorite: !point.isFavorite };
-    this.updatePoint(updatedPoint);
-
-    return updatedPoint;
   }
 
   updatePoint(updatedPoint) {
@@ -25,24 +19,36 @@ export default class PointCardsModel {
     });
   }
 
-  sortPointsData(sortInputId) {
-    switch (sortInputId) {
-      case InputId.SORT_DAY:
-        this.#pointCards.sort(sortPrice);
-        break;
-      case InputId.SORT_EVENT:
-        this.#pointCards.sort(sortPrice);
-        break;
-      case InputId.SORT_TIME:
-        this.#pointCards.sort(sortPrice);
-        break;
-      case InputId.SORT_PRICE:
-        this.#pointCards.sort(sortPrice);
-        break;
-      case InputId.SORT_OFFER:
-        this.#pointCards.sort(sortPrice);
-        break;
-      default:
-    }
+  getPoint(id) {
+    return this.#pointCards.find((point) => point.id === id);
+  }
+
+  addPoint(point) {
+    this.#pointCards.unshift(point);
+    this._notify(EventType.ADD_NEW_POINT, point);
+  }
+
+  get pointTemplate() {
+    return {
+      id: nanoid(),
+
+      type: PointCardType.BUS,
+
+      time: {
+        start: new Date(),
+        end: new Date(),
+      },
+
+      city: {
+        name: '',
+        description: '',
+      },
+
+      price: 0,
+
+      offers: [],
+
+      isFavorite: false,
+    };
   }
 }

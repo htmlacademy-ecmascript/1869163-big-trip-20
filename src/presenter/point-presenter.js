@@ -1,20 +1,50 @@
-import { remove, render, replace } from '../framework/render';
-import PointCardsModel from '../model/point-cards-model';
+import { remove, render, RenderPosition, replace } from '../framework/render';
 import { isEscapeKey } from '../utils';
 import TripListItemOpenedView from '../view/trip-list-item-opened-view';
 import TripListItemView from '../view/trip-list-item-view';
 import TripListView from '../view/trip-list-view';
 
 export default class PointPresenter {
-  constructor() {
+  constructor(pointCardsModel, headerAddNewPointButton) {
     this.pointCardContainer = new TripListView();
-
+    this.headerAddNewPointButton = headerAddNewPointButton;
+    this.pointCardsModel = pointCardsModel;
     this.pointComponents = [];
     this.openedPointComponent = null;
-
     this.openedPoint = null;
+    this.pointTemplate = null;
+  }
 
-    this.pointCardsModel = new PointCardsModel();
+  pointTemplateRemove() {
+    if (
+      !this.openedPointComponent ||
+      !this.pointTemplate ||
+      this.openedPointComponent.id !== this.pointTemplate.id
+    ) {
+      return;
+    }
+
+    this.openedPointComponent?.element.remove();
+    this.pointTemplate = null;
+    this.openedPointComponent = null;
+    this.headerAddNewPointButton.disabled = false;
+  }
+
+  addNewOpenedPoint() {
+    this.headerAddNewPointButton.disabled = true;
+
+    this.pointTemplate = this.pointCardsModel.pointTemplate;
+    const pointTemplateComponent = this.#createNewOpenedPoint(
+      this.pointTemplate,
+      () => this.pointTemplateRemove()
+    );
+    this.openedPointComponent = pointTemplateComponent;
+
+    render(
+      pointTemplateComponent,
+      this.pointCardContainer.element,
+      RenderPosition.AFTERBEGIN
+    );
   }
 
   #createNewPoint(point) {
@@ -28,34 +58,55 @@ export default class PointPresenter {
 
     const favoriteBtn = pointView.element.querySelector('.event__favorite-btn');
     favoriteBtn.addEventListener('click', () => {
-      const updatedPoint = this.pointCardsModel.toggleIsFavorite(point);
+      const updatedPoint = { ...point, isFavorite: !point.isFavorite };
+      this.pointCardsModel.updatePoint(updatedPoint);
       this.#rerenderPoint(updatedPoint);
     });
 
     return pointView;
   }
 
-  #createNewOpenedPoint(point) {
-    const pointOpenedView = new TripListItemOpenedView(point);
-    this.openedPointComponent = pointOpenedView;
-
-    const pointForm = pointOpenedView.element.querySelector('form');
-    pointForm.addEventListener('submit', () =>
-      this.#replaceFormWithPoint(point)
-    );
-
-    const cancelBtn =
-      pointOpenedView.element.querySelector('.event__reset-btn');
-    cancelBtn.addEventListener('click', () => {
+  #createNewOpenedPoint(point, customCancelHandler) {
+    const cancelHandler = () => {
       this.#replaceFormWithPoint(point);
-
       this.openedPoint = null;
-    });
+    };
+    const formCancelHandler = customCancelHandler
+      ? customCancelHandler
+      : cancelHandler;
+
+    const formSubmitHandler = (evt) => {
+      evt.preventDefault();
+
+      if (this.pointTemplate) {
+        this.pointCardsModel.addPoint(this.pointTemplate);
+        this.pointComponents.push(this.#createNewPoint(this.pointTemplate));
+        this.#replaceFormWithPoint(this.pointTemplate);
+
+        this.pointTemplate = null;
+        this.openedPoint = null;
+        this.headerAddNewPointButton.disabled = false;
+
+        return;
+      }
+
+      this.#replaceFormWithPoint(point);
+      this.openedPoint = null;
+    };
+
+    const pointOpenedView = new TripListItemOpenedView(
+      point,
+      formCancelHandler,
+      formSubmitHandler
+    );
+    this.openedPointComponent = pointOpenedView;
 
     return pointOpenedView;
   }
 
   #replacePointWithForm(point) {
+    this.pointTemplateRemove();
+
     if (this.openedPoint !== null) {
       this.#replaceFormWithPoint(this.openedPoint);
       this.openedPoint = null;
@@ -122,6 +173,7 @@ export default class PointPresenter {
   }
 
   destroy() {
+    this.pointComponents = [];
     remove(this.pointCardContainer);
   }
 }
