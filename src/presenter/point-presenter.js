@@ -36,6 +36,8 @@ export default class PointPresenter {
   }
 
   #temporaryPointRemove() {
+    document.removeEventListener('keydown', this.#onDocumentKeydown);
+
     if (
       !this.temporaryPoint ||
       this.openedPointComponent.id !== this.temporaryPoint.id
@@ -85,6 +87,8 @@ export default class PointPresenter {
   }
 
   #createNewOpenedPoint(point, customCancelHandler) {
+    document.addEventListener('keydown', this.#onDocumentKeydown);
+
     const cancelHandler = () => {
       this.#closePointCard();
     };
@@ -158,6 +162,8 @@ export default class PointPresenter {
     replace(pointView, this.openedPointComponent);
     this.openedPointComponent = null;
     this.openedPoint = null;
+
+    document.removeEventListener('keydown', this.#onDocumentKeydown);
   }
 
   #rerenderPoint(updatedPoint) {
@@ -197,8 +203,6 @@ export default class PointPresenter {
       const pointView = this.#createNewPoint(point);
       render(pointView, this.pointCardContainer.element);
     });
-
-    document.addEventListener('keydown', this.#onDocumentKeydown);
   }
 
   destroy() {

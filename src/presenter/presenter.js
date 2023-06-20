@@ -21,7 +21,8 @@ export default class Presenter {
     pointCardsModel,
     filterModel,
     sortModel,
-    timeFilterPresenter
+    timeFilterPresenter,
+    setIsErrorModalVisible
   ) {
     this.headerTripInfoContainer = headerTripInfoContainer;
     this.tripEventsSectionContainer = tripEventsSectionContainer;
@@ -37,6 +38,7 @@ export default class Presenter {
       sortModel
     );
     this.timeFilterPresenter = timeFilterPresenter;
+    this.setIsErrorModalVisible = setIsErrorModalVisible;
 
     this.currentModifier = { eventType: null, modifier: SortType.SORT_DAY };
     this.emptyListMessageView = null;
@@ -48,7 +50,7 @@ export default class Presenter {
     };
     this.sortModel.addObserver(this.filterObserverCallback);
 
-    this.pointCardsModel.addObserver((eventType, point) => {
+    this.pointCardsModel.addObserver((eventType, payload) => {
       if (
         (eventType === EventType.FETCH_POINTS ||
           eventType === EventType.ADD_POINT) &&
@@ -77,8 +79,12 @@ export default class Presenter {
       }
 
       if (eventType === EventType.UPDATE_POINT) {
-        this.updateFilteredPoints(point);
+        this.updateFilteredPoints(payload);
         this.#rerenderPointCards();
+      }
+
+      if (eventType === EventType.RESPONSE_ERROR) {
+        this.setIsErrorModalVisible(true, payload.message);
       }
     });
 

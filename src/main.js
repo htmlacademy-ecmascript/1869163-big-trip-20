@@ -2,14 +2,8 @@ import Presenter from './presenter/presenter';
 import PointCardsModel from './model/point-cards-model';
 import TimeFilterPresenter from './presenter/time-filter-presenter';
 import FilterModel from './model/filter-model';
-import {
-  FilterType,
-  SortType,
-  API_SERVER_END_POINT,
-  AUTHORIZATION_TOKEN,
-} from './const';
+import { FilterType, SortType } from './const';
 import SortModel from './model/sort-model';
-import ApiService from './framework/api-service';
 
 const headerTripInfoContainer = document.querySelector('.trip-main');
 const headerTripControlsFilterContainer = headerTripInfoContainer.querySelector(
@@ -29,10 +23,29 @@ const setIsLoaderVisible = (isVisible) => {
   }
 };
 
-const apiService = new ApiService(API_SERVER_END_POINT, AUTHORIZATION_TOKEN);
+const errorModal = document.querySelector('.error-modal');
+const errorModalCloseButton = document.querySelector(
+  '.error-modal-close-button'
+);
+const setIsErrorModalVisible = (isVisible, textPrefix) => {
+  if (isVisible) {
+    errorModal.querySelector(
+      'h2'
+    ).textContent = `${textPrefix}Something's gone wrong...`;
+    errorModal.classList.remove('hidden');
+  } else {
+    errorModal.classList.add('hidden');
+  }
+};
+errorModalCloseButton.addEventListener('click', () =>
+  setIsErrorModalVisible(false)
+);
 
 const tripEventsSection = document.querySelector('.trip-events');
-const pointCardsModel = new PointCardsModel(apiService, setIsLoaderVisible);
+const pointCardsModel = new PointCardsModel(
+  setIsLoaderVisible,
+  setIsErrorModalVisible
+);
 const filterModel = new FilterModel(FilterType.EVERYTHING);
 const sortModel = new SortModel(SortType.SORT_DAY);
 const timeFilterPresenter = new TimeFilterPresenter(
@@ -47,7 +60,8 @@ const presenter = new Presenter(
   pointCardsModel,
   filterModel,
   sortModel,
-  timeFilterPresenter
+  timeFilterPresenter,
+  setIsErrorModalVisible
 );
 
 presenter.init();
