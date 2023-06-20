@@ -1000,8 +1000,8 @@ main {
   z-index: 999;
 }
 
-.loader-overlay.--hidden,
-.error-modal-overlay.--hidden {
+.loader-overlay.hidden,
+.error-modal.hidden {
   display: none;
 }
 
@@ -1024,4 +1024,24 @@ main {
   border-radius: 50%;
   background-image: url(../img/icons/loader.gif);
   background-position: center;
+}
+
+.error-modal {
+  position: absolute;
+  top: 3rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  background-color: #bb0000;
+  color: #fff;
+  padding: 3rem 5rem;
+  border-radius: 0.5rem;
+  box-shadow: 10px 10px 15px -3px rgb(0 0 0 / 20%);
+}
+
+.error-modal-close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  border: 0;
 }

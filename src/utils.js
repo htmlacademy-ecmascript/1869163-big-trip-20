@@ -57,10 +57,10 @@ const filterPresent = (point) =>
   dayjs(point.time.start).isSameOrBefore(dayjs()) &&
   dayjs(point.time.end).isSameOrAfter(dayjs());
 
-const getCities = (destinationsArray) => {
+const getCities = (destinationsResponse) => {
   const citiesById = {};
   const citiesByName = {};
-  destinationsArray.forEach(({ id, name, description, pictures }) => {
+  destinationsResponse.forEach(({ id, name, description, pictures }) => {
     citiesById[id] = { name, description, pictures };
     citiesByName[name] = { id, description, pictures };
   });

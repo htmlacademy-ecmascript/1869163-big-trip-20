@@ -1,23 +1,22 @@
 import {
-  Endpoints,
+  API_SERVER_END_POINT,
+  AUTHORIZATION_TOKEN,
   EventType,
   POINT_DEFAULT_TYPE,
-  RequestMethods,
 } from '../const';
 import Observable from '../framework/observable';
 import {
   getCities,
   convertToOffersByType,
   convertPoint,
-  preparePointToServer,
 } from '../utils';
-import ApiService from '../framework/api-service';
+import BigTripApiService from '../big-trip-api-service';
 
 export default class PointCardsModel extends Observable {
-  constructor(apiService, setIsLoaderVisible) {
+  constructor(setIsLoaderVisible) {
     super();
-    this.apiService = apiService;
     this.setIsLoaderVisible = setIsLoaderVisible;
+    this.apiService = new BigTripApiService(API_SERVER_END_POINT, AUTHORIZATION_TOKEN);
   }
 
   #pointCards = [];
@@ -37,30 +36,25 @@ export default class PointCardsModel extends Observable {
   }
 
   async #fetchDestinations() {
-    const response = await this.apiService._load({
-      url: Endpoints.GET_DESTINATIONS,
-    });
-    const destinations = await ApiService.parseResponse(response);
+    const destinationsResponse = await this.apiService.fetchDestinations();
 
-    const { citiesByName, citiesById } = getCities(destinations);
+    const { citiesByName, citiesById } = getCities(destinationsResponse);
     this.#citiesByName = citiesByName;
     this.#citiesById = citiesById;
 
     this.#suggestions = [
-      ...new Set(destinations.map(({ name }) => name)),
+      ...new Set(destinationsResponse.map(({ name }) => name)),
     ].sort();
   }
 
   async #fetchOffers() {
-    const response = await this.apiService._load({ url: Endpoints.GET_OFFERS });
-    const offersResponse = await ApiService.parseResponse(response);
+    const offersResponse = await this.apiService.fetchOffers();
 
     this.#offersByType = convertToOffersByType(offersResponse);
   }
 
   async #fetchPoints() {
-    const response = await this.apiService._load({ url: Endpoints.GET_POINTS });
-    const points = await ApiService.parseResponse(response);
+    const points = await this.apiService.fetchPoints();
 
     this.#pointCards = convertPoint(
       points,
@@ -80,7 +74,7 @@ export default class PointCardsModel extends Observable {
 
       this._notify(EventType.FETCH_POINTS);
     } catch (error) {
-      this._notify(EventType.RESPONSE_ERROR);
+      this._notify(EventType.RESPONSE_ERROR, error);
     }
 
     this.#setIsLoading(false);
@@ -91,12 +85,7 @@ export default class PointCardsModel extends Observable {
       this.#setIsLoading(true);
       this._notify(EventType.SENDING_REQUEST);
 
-      await this.apiService._load({
-        url: `${Endpoints.UPDATE_POINT}/${updatedPoint.id}`,
-        method: RequestMethods.PUT,
-        body: JSON.stringify(preparePointToServer(updatedPoint)),
-        headers: new Headers({ 'Content-type': 'application/json' }),
-      });
+      this.apiService.updatePoint(updatedPoint);
 
       this.#pointCards = this.#pointCards.map((point) => {
         if (point.id === updatedPoint.id) {
@@ -118,18 +107,11 @@ export default class PointCardsModel extends Observable {
       this.#setIsLoading(true);
       this._notify(EventType.SENDING_REQUEST);
 
-      const response = await this.apiService._load({
-        url: Endpoints.ADD_POINT,
-        method: RequestMethods.POST,
-        body: JSON.stringify(preparePointToServer(newPoint)),
-        headers: new Headers({ 'Content-type': 'application/json' }),
-      });
-
-      const { id } = await ApiService.parseResponse(response);
+      const id = await this.apiService.addPoint(newPoint);
       this.pointCards.push({ ...newPoint, id });
       this._notify(EventType.ADD_POINT);
     } catch (error) {
-      this._notify(EventType.RESPONSE_ERROR);
+      this._notify(EventType.RESPONSE_ERROR, error);
     }
     this.#setIsLoading(false);
   }
@@ -139,15 +121,11 @@ export default class PointCardsModel extends Observable {
       this.#setIsLoading(true);
       this._notify(EventType.REQUEST_TO_DELETE_POINT);
 
-      await this.apiService._load({
-        url: `${Endpoints.DELETE_POINT}/${point.id}`,
-        method: RequestMethods.DELETE,
-      });
-
+      this.apiService.deletePoint(point);
       this.#pointCards = this.#pointCards.filter(({ id }) => id !== point.id);
       this._notify(EventType.POINT_IS_DELETED);
     } catch (error) {
-      this._notify(EventType.RESPONSE_ERROR);
+      this._notify(EventType.RESPONSE_ERROR, error);
     }
 
     this.#setIsLoading(false);
